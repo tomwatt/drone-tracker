@@ -10,11 +10,19 @@ simulator.startSimulator(simulatorSocket)
 server.listen(constants.simulatorPort)
 
 io.on('connection', function (socket) {
-  socket.on('create-drone-simulator', data => {})
+  socket.on('create-drone-simulator', data => {
+    simulator.createDrone(simulatorSocket)
+  })
 
-  socket.on('pause-drone', data => {})
+  socket.on('pause-drone', data => {
+    simulator.pauseDrone(data)
+  })
 
-  socket.on('restart-drone', data => {})
+  socket.on('restart-drone', data => {
+    simulator.restartDrone(data)
+  })
 
-  socket.on('delete-drone', data => {})
+  socket.on('delete-drone', data => {
+    simulator.deleteDrone(data)
+  })
 })
