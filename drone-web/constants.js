@@ -1,2 +1,6 @@
 exports.redisHost = 'redis'
 exports.redisPort = '6379'
+exports.droneLocationUpdateMessage = 'drone-location-update'
+exports.dronePausedNotificationMessage = 'drone-paused-notification'
+exports.droneDeletedNotificationMessage = 'drone-deleted-notification'
+exports.droneRestartedNotificationMessage = 'drone-restarted-notification'
