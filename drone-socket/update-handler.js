@@ -1,8 +1,6 @@
 var constants = require('./constants')
-var redisClient = require('redis').createClient(
-  constants.redisPort,
-  constants.redisHost
-)
+var redis = require('redis')
+var redisClient = redis.createClient(constants.redisPort, constants.redisHost)
 var validate = require('jsonschema').validate
 
 redisClient.on('error', function (err) {
@@ -60,7 +58,6 @@ function getExistingRedisValue (data, callback) {
   redisClient.get(data.ID, (err, reply) => {
     if (err) {
       console.log('Error getting redis value: ' + err)
-      return null
     } else {
       var result = JSON.parse(reply)
       callback(result)
