@@ -27,7 +27,7 @@ var messageSchema = {
 //     lat: 123,
 //     lon: 456,
 //     timestamp: 123123123, // Unix timestamp
-//     sim: true, // defines whether the object was created by the simulator or a real drone, can be emitted
+//     sim: true, //defines whether the object was created by the simulator or a real drone, can be emitted
 //     paused: false //only used for simulated drones, can be emitted
 // }
 // Saves the object in redis with the key being set as the ID.
