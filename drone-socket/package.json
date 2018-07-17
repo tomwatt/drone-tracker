@@ -4,7 +4,8 @@
   "description": "A server which receives gps location updates from uniquely identified drones, saves their most recent location in redis, and publishes the change to any subscribers via redis.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test-unit",
+    "test-unit": "mocha \"*.spec.js\""
   },
   "author": "Tom Watt <tom.watt@protonmail.com>",
   "license": "ISC",
