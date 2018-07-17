@@ -6,6 +6,12 @@ services:
           - "3000:3000"
       depends_on:
           - "redis"
+  drone-simulator:
+      build: ./drone-simulator
+      ports:
+          - "3030:3030"
+      depends_on:
+          - "redis"          
   redis:
       image: redis
       ports:
