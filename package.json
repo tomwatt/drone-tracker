@@ -22,5 +22,17 @@
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
     "prettier": "1.13.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   }
 }
