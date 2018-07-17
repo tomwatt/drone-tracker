@@ -9,6 +9,7 @@
   "author": "Tom Watt <tom.watt@protonmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.3"
   }
 }
