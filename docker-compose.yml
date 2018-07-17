@@ -11,7 +11,13 @@ services:
       ports:
           - "3030:3030"
       depends_on:
-          - "redis"          
+          - "redis" 
+  drone-web:
+      build: ./drone-web
+      ports:
+          - "80:80"
+      depends_on:
+          - "redis"                   
   redis:
       image: redis
       ports:
