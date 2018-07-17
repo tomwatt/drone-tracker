@@ -49,7 +49,12 @@ function setNewRedisValue (data) {
   var newValue = JSON.stringify(data)
   redisClient.set(data.ID, newValue, (err, reply) => {
     if (err) console.log('Error setting redis value: ' + err)
-    else redisClient.publish(constants.locationUpdateChannel, data.ID)
+    else {
+      redisClient.publish(
+        constants.locationUpdateChannel,
+        JSON.stringify(data)
+      )
+    }
   })
 }
 
