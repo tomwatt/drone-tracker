@@ -5,7 +5,7 @@ var redisClient = require('redis').createClient(
   constants.redisHost
 )
 
-// Create a drone object, and sends it using the provided socket.io socket
+// Create a drone object, and sends it to the drone-socket application using the provided socket.io socket
 function createDrone (socket) {
   var drone = {
     ID: uuidv4(),
@@ -92,7 +92,7 @@ function restartDrone (data) {
 }
 
 // Attempts to retrieve all values in redis, then updates the location / timestamp of each drone
-// and emits the updated value using the provided socket.io socket
+// and emits the updated value to the drone-socket application using the provided socket.io socket
 function updateAllValues (socket) {
   redisClient.keys('*', (err, reply) => {
     if (err) console.log(err)
