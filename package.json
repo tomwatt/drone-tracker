@@ -1,0 +1,15 @@
+{
+  "name": "drone-tracker",
+  "version": "1.0.0",
+  "description": "An application which tracks drones in real time, and displays their location in a single page web app. Built as a collection of individual micro-services.",  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "drone",
+    "gps",
+    "tracking"
+  ],
+  "author": "Tom Watt <tom.watt@protonmail.com>",
+  "license": "ISC"
+}
