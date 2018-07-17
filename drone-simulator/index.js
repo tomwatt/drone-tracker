@@ -2,12 +2,12 @@ var server = require('http').createServer()
 var io = require('socket.io')(server)
 var ioClient = require('socket.io-client')
 var simulator = require('./simulator')
+var constants = require('./constants')
 
-var socketUrl = 'http://drone-socket:3000'
-var simulatorSocket = ioClient(socketUrl)
+var simulatorSocket = ioClient(constants.droneSocketUrl)
 simulator.startSimulator(simulatorSocket)
 
-server.listen(3030)
+server.listen(constants.simulatorPort)
 
 io.on('connection', function (socket) {
   socket.on('create-drone-simulator', data => {})
