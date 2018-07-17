@@ -1,0 +1,11 @@
+{
+  "name": "drone-simulator",
+  "version": "1.0.0",
+  "description": "A server which creates gps locations for drones, and sends them to a secondary drone-socket server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Watt <tom.watt@protonmail.com>",
+  "license": "ISC"
+}
