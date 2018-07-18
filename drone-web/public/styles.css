@@ -1,0 +1,19 @@
+tr button {
+    display: none;
+}
+
+tr.simulated button {
+    display: block;
+}  
+
+.paused .pause-drone {
+    display: none;
+}
+
+tr .restart-cell button{
+    display:none;
+}
+
+tr.paused .restart-cell button{
+    display:block;
+}
