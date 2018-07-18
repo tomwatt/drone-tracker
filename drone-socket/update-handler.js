@@ -1,24 +1,29 @@
 var constants = require('./constants')
 var redis = require('redis')
 var redisClient = redis.createClient(constants.redisPort, constants.redisHost)
-var validate = require('jsonschema').validate
+var Validator = require('jsonschema').Validator
 
 redisClient.on('error', function (err) {
   console.log('Redis Client Error :' + err)
 })
 
+// The schema to validate incoming JSON objects
 var messageSchema = {
   id: '/droneMessage',
   type: 'object',
   properties: {
     ID: { type: 'string' },
-    lat: { type: 'number' },
-    lon: { type: 'number' },
-    timestamp: { type: 'number' },
+    lat: { format: 'isNumber' },
+    lon: { format: 'isNumber' },
+    timestamp: { format: 'isNumber' },
     sim: { type: 'boolean' },
     paused: { type: 'boolean' }
   },
   required: ['ID', 'lat', 'lon', 'timestamp']
+}
+
+Validator.prototype.customFormats.isNumber = function (input) {
+  return !isNaN(input)
 }
 
 // A function that takes in a JSON object representing a drone location in the form:
@@ -34,14 +39,15 @@ var messageSchema = {
 // If their is a previous value for the same key, it is replaced, and the speed
 // is calculated based on the difference between the two.
 function newMessage (data) {
-  var vaildationResult = validate(data, messageSchema)
+  var validator = new Validator()
+  var vaildationResult = validator.validate(data, messageSchema)
   if (vaildationResult.valid) {
     getExistingRedisValue(data, previousValue => {
       var speed = calculateSpeedKmPerHour(previousValue, data)
       data.speed = speed
       setNewRedisValue(data)
     })
-  }
+  } else console.log(vaildationResult.errors)
 }
 
 // Adds data object to redis, with key set to data.ID, and publishes the update via redis
