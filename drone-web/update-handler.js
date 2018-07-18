@@ -30,7 +30,7 @@ function broadcastAllValues (socket) {
 
 // When drones are updated in redis, this allows the UI of every user to update simultaneously
 // Any updates published via redis are emitted via the provided socket.io socket
-function subsribeToUpdates (socket) {
+function subscribeToUpdates (socket) {
   subscription.on('message', (channel, message) => {
     if (channel === constants.locationUpdateChannel) {
       socket.emit(constants.webLocationUpdate, JSON.parse(message))
@@ -45,4 +45,4 @@ function subsribeToUpdates (socket) {
 }
 
 exports.broadcastAllValues = broadcastAllValues
-exports.subsribeToUpdates = subsribeToUpdates
+exports.subscribeToUpdates = subscribeToUpdates
