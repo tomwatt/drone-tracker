@@ -47,7 +47,7 @@ function newMessage (data) {
       data.speed = speed
       setNewRedisValue(data)
     })
-  } else console.log(vaildationResult.errors)
+  }
 }
 
 // Adds data object to redis, with key set to data.ID, and publishes the update via redis
