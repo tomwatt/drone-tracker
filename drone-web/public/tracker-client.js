@@ -70,7 +70,7 @@ function createNewRow (drone) {
   if (Date.now() - drone.timestamp > 10000) dangerClasss = 'table-danger'
 
   var newRow =
-    '<tr scope="row" id="' +
+    '<tr class="drone-row" scope="row" id="' +
     drone.ID +
     '" class="' +
     paused +
