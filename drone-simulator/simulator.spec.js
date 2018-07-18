@@ -199,7 +199,310 @@ describe('drone-simulator simulator', function () {
     revertClient()
   })
 
-  it('pauseDrone tries to send update with paused set to true', function () {})
-  it('restartDrone tries to send update with paused set to false', function () {})
-  it('deleteDrone tries to delete drone from redis', function () {})
+  it('pauseDrone tries to send update with paused set to true', function () {
+    var runningDrone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: false
+    }
+    var pausedDrone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: true
+    }
+
+    var redisValue = JSON.stringify(runningDrone)
+    var expectedRedisValue = JSON.stringify(pausedDrone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: sinon.spy(function (key, val, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.pauseDrone(runningDrone.ID)
+
+    expect(redisClientMock.set).to.be.calledWith(
+      runningDrone.ID,
+      expectedRedisValue
+    )
+
+    revertClient()
+  })
+
+  it('pauseDrone only allows updating of simulated drones', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: false
+    }
+
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: sinon.spy(function (key, val, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.pauseDrone(drone.ID)
+
+    expect(redisClientMock.set).to.not.be.called
+
+    revertClient()
+  })
+
+  it('pauseDrone tries to publish notification via redis is successful', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: false
+    }
+
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: function (key, val, cb) {
+        cb(null, null)
+      },
+      publish: sinon.spy(function (channel, message) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.pauseDrone(drone.ID)
+
+    expect(redisClientMock.publish).to.be.calledWith(
+      constants.dronePausedNotificationMessage,
+      drone.ID
+    )
+
+    revertClient()
+  })
+
+  it('restartDrone tries to send update with paused set to false', function () {
+    var pausedDrone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: true
+    }
+    var restartedDrone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: false
+    }
+
+    var redisValue = JSON.stringify(pausedDrone)
+    var expectedRedisValue = JSON.stringify(restartedDrone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: sinon.spy(function (key, val, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.restartDrone(pausedDrone.ID)
+
+    expect(redisClientMock.set).to.be.calledWith(
+      pausedDrone.ID,
+      expectedRedisValue
+    )
+
+    revertClient()
+  })
+
+  it('restartDrone only allows updating of simulated drones', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: false
+    }
+
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: sinon.spy(function (key, val, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.restartDrone(drone.ID)
+
+    expect(redisClientMock.set).to.not.be.called
+
+    revertClient()
+  })
+
+  it('restartDrone tries to publish notification via redis is successful', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: true
+    }
+
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      set: function (key, val, cb) {
+        cb(null, null)
+      },
+      publish: sinon.spy(function (channel, message) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.restartDrone(drone.ID)
+
+    expect(redisClientMock.publish).to.be.calledWith(
+      constants.droneRestartedNotificationMessage,
+      drone.ID
+    )
+
+    revertClient()
+  })
+
+  it('deleteDrone tries to delete drone from redis', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: true
+    }
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      del: sinon.spy(function (key, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.deleteDrone(drone.ID)
+
+    expect(redisClientMock.del).to.be.calledWith(drone.ID)
+    expect(redisClientMock.del).to.be.calledOnce
+    revertClient()
+  })
+
+  it('deleteDrone only tries to delete simulated drones', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: false,
+      paused: true
+    }
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      del: sinon.spy(function (key, cb) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.deleteDrone(drone.ID)
+
+    expect(redisClientMock.del).to.not.be.called
+    revertClient()
+  })
+
+  it('deleteDrone tries to publish notification via redis is successful', function () {
+    var drone = {
+      ID: '123-456',
+      lat: 45,
+      lon: 120,
+      timestamp: 123123123,
+      sim: true,
+      paused: true
+    }
+
+    var redisValue = JSON.stringify(drone)
+
+    var redisClientMock = {
+      get: function (key, cb) {
+        cb(null, redisValue)
+      },
+      del: function (key, cb) {
+        cb(null, null)
+      },
+      publish: sinon.spy(function (channel, message) {})
+    }
+
+    var simulator = rewire('./simulator.js')
+
+    var revertClient = simulator.__set__('redisClient', redisClientMock)
+
+    simulator.deleteDrone(drone.ID)
+
+    expect(redisClientMock.publish).to.be.calledWith(
+      constants.droneDeletedNotificationMessage,
+      drone.ID
+    )
+
+    revertClient()
+  })
 })
