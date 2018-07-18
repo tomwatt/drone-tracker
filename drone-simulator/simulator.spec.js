@@ -60,7 +60,7 @@ describe('drone-simulator simulator', function () {
 
     simulator.startSimulator(socketMock)
 
-    // startSimulator is a periiodic task
+    // startSimulator is a periodic task
     this.clock.tick(4000)
 
     var existingDroneIds = [existingDrones[0].ID, existingDrones[1].ID]
