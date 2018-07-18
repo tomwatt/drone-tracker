@@ -4,7 +4,7 @@ var redisClient = redis.createClient(constants.redisPort, constants.redisHost)
 var subscription = redis.createClient(constants.redisPort, constants.redisHost)
 
 // Subscribe to redis updates so we know whenever a drone gets updated in redis
-subscription.subscribe(constants.droneLocationUpdateMessage)
+subscription.subscribe(constants.locationUpdateChannel)
 subscription.subscribe(constants.dronePausedNotificationMessage)
 subscription.subscribe(constants.droneRestartedNotificationMessage)
 subscription.subscribe(constants.droneDeletedNotificationMessage)
