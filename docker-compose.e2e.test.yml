@@ -1,0 +1,48 @@
+version: '3'
+services:
+  drone-socket:
+      build: 
+        context: ./drone-socket       
+      ports:
+          - "3000:3000"
+      depends_on:
+          - "redis"
+  drone-simulator:
+      build: 
+        context: ./drone-simulator
+      ports:
+          - "3030:3030"
+      depends_on:
+          - "drone-socket"
+          - "redis" 
+  drone-web:
+      build: 
+        context: ./drone-web  
+      ports:
+          - "80:80"
+      depends_on:
+          - "drone-simulator"
+          - "redis"                   
+  redis:
+      image: redis
+      ports:
+          - "6379"
+  selenium-hub:
+    image: selenium/hub:3.13.0-argon
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+  chrome:
+    image: selenium/node-chrome:3.13.0-argon
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+  e2e-test:
+      build: 
+        context: ./e2e-test
+        dockerfile: Dockerfile.test     
+      depends_on:
+          - "drone-web"
+          - "chrome"        
