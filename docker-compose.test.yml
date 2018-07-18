@@ -15,6 +15,7 @@ services:
       ports:
           - "3030:3030"
       depends_on:
+          - "drone-socket"
           - "redis" 
   drone-web:
       build: 
@@ -23,6 +24,7 @@ services:
       ports:
           - "80:80"
       depends_on:
+          - "drone-simulator"
           - "redis"                   
   redis:
       image: redis
