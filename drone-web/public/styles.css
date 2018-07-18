@@ -17,3 +17,7 @@ tr .restart-cell button{
 tr.paused .restart-cell button{
     display:block;
 }
+
+#create-drone {
+    margin: 10px;
+}
