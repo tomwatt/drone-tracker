@@ -1,0 +1,16 @@
+{
+  "name": "e2e-test",
+  "version": "1.0.0",
+  "description": "A package that runs end to end tests on the drone-tracker application",
+  "scripts": {
+    "test": "nightwatch"
+  },
+  "author": "Tom Watt <tom.watt@protonmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "nightwatch": "^0.9.21"
+  },
+  "dependencies": {
+    "redis": "^2.8.0"
+  }
+}
