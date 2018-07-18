@@ -15,5 +15,5 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   updateHandler.broadcastAllValues(socket)
-  updateHandler.subsribeToUpdates(socket)
+  updateHandler.subscribeToUpdates(socket)
 })
