@@ -1,0 +1,11 @@
+Assumptions / decisions:
+
+The drones are already up and running. They are therefore already running their own software, and are most likely controlled by an existing back end application. Given that I don't know what this software looks like, I'm going to assume this existing application (or the drones themselves) are capable of opening a websocket connection with my application.
+I chose websockets over a simple HTTP post because the communication will involve lots of small pieces of information, sent very regularly, and websockets should provide less overhead in that scenario. However, I did briefly consider HTTP, since I don't know what type of software the drones or their controlling application are running, and HTTP might be more likely to be supported.  On balance, I decided if the client already has a drone army buzzing around, they can probably open a websocket connection.
+For testing purposes, I will create a simulator that allows the user to start 'virtual drones' in the browser, which send their location to the server, and can be paused etc. This simulator will be a separate docker container, connecting to my main application via a web socket. So as to mimick a real drone as closely as possible.
+The spec didn't mention drones being able to calculate their own speed, so given that there was a requirement for sending minimal amounts of data, I have only specified that drones should send their GPS coordinates. I will then calculate speed from the previous location and timestamp.
+
+Potential Improvements:
+User log in
+Make sure the websockets connection runs on SSL
+Require username / password for websockets connection. Use library (i.e. socketio-auth) or potentially redis session?
