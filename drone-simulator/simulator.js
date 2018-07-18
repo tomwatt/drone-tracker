@@ -94,16 +94,20 @@ function restartDrone (data) {
 // Attempts to retrieve all values in redis, then updates the location / timestamp of each drone
 // and emits the updated value to the drone-socket application using the provided socket.io socket
 function updateAllValues (socket) {
+  // Get all keys from redis
   redisClient.keys('*', (err, reply) => {
     if (err) console.log(err)
 
     if (reply.length) {
+      // Use keys to get all values from redis
       redisClient.mget(reply, (err, valueReply) => {
         if (err) console.log(err)
 
         var allDrones = valueReply.map(x => {
           return JSON.parse(x)
         })
+
+        // Update each drone's location and timestamp and emit message via socket
         for (var i = 0; i < allDrones.length; i++) {
           var drone = allDrones[i]
 
