@@ -21,8 +21,8 @@ function createDrone (socket) {
 // Attemps to find a drone object stored in redis with an ID that matches the provided string.
 // If found, it sets the paused flag to true, then updates the drone in redis, and publishes a notification
 // via redis.
-function pauseDrone (key) {
-  redisClient.get(key, (err, reply) => {
+function pauseDrone (droneID) {
+  redisClient.get(droneID, (err, reply) => {
     if (err) console.log(err)
 
     if (reply) {
@@ -45,15 +45,15 @@ function pauseDrone (key) {
 
 // Attemps to find a drone object stored in redis with an ID that matches the provided string.
 // If found, it deletes the drone from redis and publishes a notification via redis.
-function deleteDrone (data) {
-  redisClient.get(data, (err, reply) => {
+function deleteDrone (droneID) {
+  redisClient.get(droneID, (err, reply) => {
     if (err) console.log(err)
 
     if (reply) {
       var drone = JSON.parse(reply)
       // Only allow delete if simulated
       if (drone.sim) {
-        redisClient.del(data, (err, reply) => {
+        redisClient.del(droneID, (err, reply) => {
           if (!err) {
             redisClient.publish(
               constants.droneDeletedNotificationMessage,
@@ -69,8 +69,8 @@ function deleteDrone (data) {
 // Attemps to find a drone object stored in redis with an ID that matches the provided string.
 // If found, it sets the paused flag to false, then updates the drone in redis, and publishes a notification
 // via redis.
-function restartDrone (data) {
-  redisClient.get(data, (err, reply) => {
+function restartDrone (droneID) {
+  redisClient.get(droneID, (err, reply) => {
     if (err) console.log(err)
 
     if (reply) {
